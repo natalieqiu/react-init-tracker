@@ -1,33 +1,54 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import InitTable from "./InitTable.jsx";
+import Dice from './Dice.jsx'
+//import dice from "./Dice.jsx";
+import {Howl} from 'howler';
+import {Button} from "@mui/material";
+
+const click = new Howl({
+    src://['./src/assets/deltarune-explosion.mp3']
+        ['./src/assets/mouse-click.mp3'],
+    // './assets/mouse-click.mp3'], // Provide multiple formats for browser compatibility
+});
+
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <header className="App-header">
-          header
-      </header>
-        <nav className="App-nav">
-            nav
-        </nav>
-        <body>
-        <div className="App-body">
-            <InitTable name = "bob"></InitTable>
-            <div></div>
-            <InitTable name = "joe"></InitTable>
-        </div>
+    const handleButtonClick = () => {
+        setCount(count + 1);
+        click.play(); // Play sound when button is clicked
+    }
+    return (
+        <>
+            <header className="App-header">
+                header
+            </header>
+            <nav className="App-nav">
+                nav
+            </nav>
+            <div className="App-body">
+                <Button variant={"outlined"}  size={"large"}>
+                    {Dice}
+                </Button>
+                <Button variant={"outlined"}  size={"large"}
+                        onClick={handleButtonClick}>
+                    {count}
+                </Button>
+                <InitTable name="bob"></InitTable>
+                <div></div>
+                <InitTable name="joe"></InitTable>
+            </div>
 
-        </body>
-        <footer className="App-footer">
-            feet
-        </footer>
-    </>
-  )
+
+            <footer className="App-footer">
+                feet
+            </footer>
+        </>
+    )
 }
 
 export default App
