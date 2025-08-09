@@ -1,12 +1,11 @@
 import {useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import InitTable from "./InitTable.jsx";
 import Dice from './Dice.jsx'
 //import dice from "./Dice.jsx";
 import {Howl} from 'howler';
 import {Button} from "@mui/material";
+import RangelimitedInputter from "./RangelimitedInputter.jsx";
 
 const click = new Howl({
     src://['./src/assets/deltarune-explosion.mp3']
@@ -31,6 +30,9 @@ function App() {
                 nav
             </nav>
             <div className="App-body">
+
+                <RangelimitedInputter min={1} max = {10}> </RangelimitedInputter>
+
                 <Button variant={"outlined"}  size={"large"}>
                     {Dice}
                 </Button>
