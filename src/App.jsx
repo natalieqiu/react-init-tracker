@@ -24,24 +24,29 @@ function App() {
     return (
         <>
             <header className="App-header">
-                header
+                <h1> Webbedsite </h1>
             </header>
             <nav className="App-nav">
                 nav
             </nav>
+            <div className="dice selector">
+
+                <h2>
+                    <RangelimitedInputter name={"numdice"} min={1} max = {10}> </RangelimitedInputter>
+                    d
+                    <RangelimitedInputter name={'dicefaces'} min={1} max = {99}> </RangelimitedInputter>
+                </h2>
+
+            </div>
             <div className="App-body">
-
-                <RangelimitedInputter min={1} max = {10}> </RangelimitedInputter>
-
-                <Button variant={"outlined"}  size={"large"}>
-                    {Dice}
-                </Button>
                 <Button variant={"outlined"}  size={"large"}
                         onClick={handleButtonClick}>
                     {count}
                 </Button>
                 <InitTable name="bob"></InitTable>
-                <div></div>
+                <div>
+
+                </div>
                 <InitTable name="joe"></InitTable>
             </div>
 
