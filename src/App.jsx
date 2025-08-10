@@ -44,6 +44,7 @@ function App() {
                 </h2>
 
             </div>
+            <Dice></Dice>
 
             <div className="config">
                 <h2>config</h2>

@@ -1,13 +1,21 @@
-import React, {useState} from "react";
+import React, {useState, useEffect } from "react";
+//import { useNumber } from "./NumberContext"; // Import the hook
 
 function RangelimitedInputter(props) { //default step
-    const { min=1, max = 20, step = 1 } = props;
+    const { min=1, max = 20, step = 1, value = min, onChange } = props;
     const [num, setNum] = useState(min);
     const [inputVal, setInputVal] = useState(num.toString() );
 
+    // Sync internal state when external value changes
+    useEffect(() => {
+        setInputVal(value.toString());
+    }, [value]);
+
+
     const updateValue = (newValue) => {
         const clampedValue = Math.max(min, Math.min(newValue, max));
-        setNum(clampedValue);
+        onChange(clampedValue); // Notify parent of changes
+        setNum(clampedValue); //keep this here?
         setInputVal(clampedValue.toString());
     };
 
@@ -30,6 +38,8 @@ function RangelimitedInputter(props) { //default step
 
         setNum(parsedValue);
         setInputVal(parsedValue.toString());
+        updateValue(parsedValue);
+
     }
 
     function increment() {
