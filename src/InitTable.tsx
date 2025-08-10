@@ -51,6 +51,14 @@ const InitTable = () => {
         blue: { backgroundColor: 'rgba(0, 0, 255, 0.1)' },
         green: { backgroundColor: 'rgba(0, 255, 0, 0.1)' },
     };
+    const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
+        switch (team) {
+            case 'red': return `rgba(255, 0, 0, ${opacity})`;
+            case 'blue': return `rgba(0, 0, 255, ${opacity})`;
+            case 'green': return `rgba(0, 255, 0, ${opacity})`;
+            default: return 'transparent';
+        }
+    };
 
     const table = useMaterialReactTable({
         columns,
@@ -60,34 +68,32 @@ const InitTable = () => {
         enablePagination: false,
         enableEditing: true,
         enableTableFooter: false,
-        muiTableBodyRowProps: ({ row }) => ({
-            sx: { // Using MUI's sx prop for better theming support
-                backgroundColor: theme => {
-                    switch (row.original.team) {
-                        case 'red': return theme.palette.error.light + '40'; // 40 = 25% opacity
-                        case 'blue': return theme.palette.info.light + '40';
-                        case 'green': return theme.palette.success.light + '40';
-                        default: return 'transparent';
-                    }
-                },
-                '&:hover': {
-                    backgroundColor: theme => {
-                        switch (row.original.team) {
-                            case 'red':
-                                return theme.palette.error.light + '60';
-                            case 'blue':
-                                return theme.palette.info.light + '60';
-                            case 'green':
-                                return theme.palette.success.light + '60';
-                            default:
-                                return 'transparent';
-                        }
-                        }
+        // 1. First define the drag handle configuration
+        muiRowDragHandleProps: ({ table }) => ({
+            onDragEnd: () => {
+                const { draggingRow, hoveredRow } = table.getState();
+                if (hoveredRow && draggingRow) {
+                    const newData = [...data];
+                    newData.splice(
+                        hoveredRow.index,
+                        0,
+                        newData.splice(draggingRow.index, 1)[0],
+                    );
+                    setData(newData);
                 }
             },
         }),
-    });
 
+        // 2. Then add row styling that won't interfere with dragging
+        muiTableBodyRowProps: ({ row }) => ({
+            sx: {
+                backgroundColor: getTeamBackgroundColor(row.original.team),
+                '&:hover': {
+                    backgroundColor: getTeamBackgroundColor(row.original.team, 0.3),
+                },
+            },
+        }),
+    });
     return <MaterialReactTable table={table} />;
 };
 
