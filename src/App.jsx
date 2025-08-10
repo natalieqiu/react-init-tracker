@@ -39,8 +39,7 @@ function App() {
 
                 <h2>
                     <RangelimitedInputter name={"numdice"} min={1} max={10}> </RangelimitedInputter>
-                    d
-                    <RangelimitedInputter name={'dicefaces'} min={1} max={99}> </RangelimitedInputter>
+
                 </h2>
 
             </div>

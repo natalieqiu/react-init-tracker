@@ -16,6 +16,7 @@ export interface CharacterBase {
     initmod: number;
     lair: boolean;
     team: TeamColor;
+    turns: number ; //number or undef
 }
 
 export interface CharacterInstance extends CharacterBase {

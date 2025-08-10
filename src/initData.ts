@@ -26,24 +26,25 @@ export const initData: TableData = [
 
 export const playerConfigTestData: CharacterBase[] = [
     {
-        id : Date.now().toString(),
+        id : 1,
         initmod: 1,
         name: 'ally',
         lair: false,
         team: 'blue',
+        turns: 1,
     },
     {
-        id : Date.now().toString(),
+        id : 2,
         initmod: 2,
         name: 'billan',
         lair: false,
         team: 'red',
+        turns: 2,
     },
     {
-        id : Date.now().toString(),
+        id : 3,
         initmod: 20,
         name: 'lair',
-        init: 20,
         lair: true,
         team: 'green',
     }

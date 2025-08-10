@@ -1,6 +1,6 @@
 import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable} from "material-react-table";
 import {useMemo, useState} from "react";
-import type {Character, CharacterBase, TableData, TeamColor} from "./types";
+import type {CharacterBase, TeamColor} from "./types";
 import {Checkbox} from "@mui/material";
 import {playerConfigTestData, playerConfigTestData as data} from "./initData";
 
@@ -15,6 +15,7 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
                 accessorKey: 'id',
                 header: 'id',
                 size: 150,
+                enableEditing: false, // Make ID non-editable
             },
             {
                 accessorKey: 'initmod',
@@ -30,7 +31,15 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
                 accessorKey: 'lair',
                 header: 'lair',
                 Cell: ({cell}) => (
-                    <Checkbox checked={cell.getValue<boolean>()}/>
+                    <Checkbox checked={cell.getValue<boolean>()} disabled/>
+                ),
+                Edit: ({cell, column, row, table}) => (
+                    <Checkbox
+                        checked={row._valuesCache[column.id] ?? cell.getValue()}
+                        onChange={(e) => {
+                            row._valuesCache[column.id] = e.target.checked;
+                        }}
+                    />
                 ),
                 size: 150,
             },
@@ -38,12 +47,28 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
                 accessorKey: 'team',
                 header: 'team',
                 size: 150,
+                editVariant: 'select',
+                editSelectOptions: ['red', 'blue', 'green'] as TeamColor[],
+            },
+            {
+                accessorKey: 'turns',
+                header: 'turns',
+                size: 150,
             },
         ],
         [],
     );
     const columns = columnsProp || defaultColumns;
-    const [data, setData] = useState<CharacterBase[] >(playerConfigTestData);
+    const [data, setData] = useState<CharacterBase[]>(playerConfigTestData);
+
+
+    const handleSaveRow = ({row, values}: { row: any; values: CharacterBase }) => {
+        setData(prevData =>
+            prevData.map(character =>
+                character.id === row.original.id ? {...character, ...values} : character
+            )
+        );
+    };
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
@@ -59,6 +84,12 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         }
     };
 
+    const coloredData = useMemo(() => data.map(character => ({
+        ...character,
+        _rowColor: getTeamBackgroundColor(character.team),
+        _rowHoverColor: getTeamBackgroundColor(character.team, 0.5)
+    })), [data]);
+
     const table = useMaterialReactTable({
         columns,
         data,
@@ -67,15 +98,20 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         enableEditing: true,
         enableTableFooter: false,
 
-        // 2. Then add row styling that won't interfere with dragging
-        muiTableBodyRowProps: ({row}) => ({
-            sx: {
-                backgroundColor: getTeamBackgroundColor(row.original.team),
-                '&:hover': {
-                    backgroundColor: getTeamBackgroundColor(row.original.team, 0.3),
+        //onEditingRowSave:
+        editDisplayMode: 'cell', // Use row editing mode instead of modal
+        onEditingRowSave: handleSaveRow,
+        muiTableBodyRowProps: ({ row }) => {
+            // Type-safe way to get the current team without .find()
+            const currentTeam = data[row.index]?.team ?? row.original.team;
+            return {
+                sx: {
+                    backgroundColor: getTeamBackgroundColor(currentTeam),
+                    '&:hover': {
+                        backgroundColor: getTeamBackgroundColor(currentTeam, 0.5),
                 },
             },
-        }),
+        };},
     });
     return <MaterialReactTable table={table}/>;
 };
