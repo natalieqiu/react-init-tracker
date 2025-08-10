@@ -28,6 +28,10 @@ function App() {
             </header>
             <nav className="App-nav">
                 nav
+                <Button variant={"outlined"}  size={"large"}
+                           onClick={handleButtonClick}>
+                {count}
+            </Button>
             </nav>
             <div className="dice selector">
 
@@ -39,13 +43,10 @@ function App() {
 
             </div>
             <div className="App-body">
-                <Button variant={"outlined"}  size={"large"}
-                        onClick={handleButtonClick}>
-                    {count}
-                </Button>
+                <h2>this turn </h2>
                 <InitTable name="bob"></InitTable>
                 <div>
-
+                <h2> next turn</h2>
                 </div>
                 <InitTable name="joe"></InitTable>
             </div>
