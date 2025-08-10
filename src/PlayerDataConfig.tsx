@@ -62,7 +62,6 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
     const table = useMaterialReactTable({
         columns,
         data,
-        enableRowOrdering: true,
         enableSorting: true,
         enablePagination: false,
         enableEditing: true,
