@@ -1,23 +1,19 @@
-import {useMemo, useState} from 'react';
-import {
-    MaterialReactTable,
-    useMaterialReactTable,
-    type MRT_ColumnDef,
-} from 'material-react-table';
-import {Checkbox} from '@mui/material';
-import {initData} from './initData';
-import type {Character, TableData, TeamColor} from './types';
+import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable} from "material-react-table";
+import {useMemo, useState} from "react";
+import type {Character, CharacterBase, TableData, TeamColor} from "./types";
+import {Checkbox} from "@mui/material";
+import {playerConfigTestData, playerConfigTestData as data} from "./initData";
 
-interface InitTableProps {
-    columns?: MRT_ColumnDef<Character>[];
+interface PlayerDataConfigProps {
+    columns?: MRT_ColumnDef<CharacterBase>[];
 }
 
-const InitTable = ({columns: columnsProp}: InitTableProps) => {
-    const defaultColumns = useMemo<MRT_ColumnDef<Character>[]>(
+const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
+    const defaultColumns = useMemo<MRT_ColumnDef<CharacterBase>[]>(
         () => [
             {
-                accessorKey: 'init',
-                header: 'init',
+                accessorKey: 'id',
+                header: 'id',
                 size: 150,
             },
             {
@@ -47,7 +43,7 @@ const InitTable = ({columns: columnsProp}: InitTableProps) => {
         [],
     );
     const columns = columnsProp || defaultColumns;
-    const [data, setData] = useState<TableData>(initData);
+    const [data, setData] = useState<CharacterBase[] >(playerConfigTestData);
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
@@ -71,21 +67,6 @@ const InitTable = ({columns: columnsProp}: InitTableProps) => {
         enablePagination: false,
         enableEditing: true,
         enableTableFooter: false,
-        // 1. First define the drag handle configuration
-        muiRowDragHandleProps: ({table}) => ({
-            onDragEnd: () => {
-                const {draggingRow, hoveredRow} = table.getState();
-                if (hoveredRow && draggingRow) {
-                    const newData = [...data];
-                    newData.splice(
-                        hoveredRow.index,
-                        0,
-                        newData.splice(draggingRow.index, 1)[0],
-                    );
-                    setData(newData);
-                }
-            },
-        }),
 
         // 2. Then add row styling that won't interfere with dragging
         muiTableBodyRowProps: ({row}) => ({
@@ -99,5 +80,4 @@ const InitTable = ({columns: columnsProp}: InitTableProps) => {
     });
     return <MaterialReactTable table={table}/>;
 };
-
-export default InitTable;
+export default PlayerDataConfig;

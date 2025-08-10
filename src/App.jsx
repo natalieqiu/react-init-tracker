@@ -6,6 +6,8 @@ import Dice from './Dice.jsx'
 import {Howl} from 'howler';
 import {Button} from "@mui/material";
 import RangelimitedInputter from "./RangelimitedInputter.jsx";
+import DualInitTable from "./DualInitTable.js";
+import PlayerDataConfig from "./PlayerDataConfig.js";
 
 const click = new Howl({
     src://['./src/assets/deltarune-explosion.mp3']
@@ -28,29 +30,40 @@ function App() {
             </header>
             <nav className="App-nav">
                 nav
-                <Button variant={"outlined"}  size={"large"}
-                           onClick={handleButtonClick}>
-                {count}
-            </Button>
+                <Button variant={"outlined"} size={"large"}
+                        onClick={handleButtonClick}>
+                    {count}
+                </Button>
             </nav>
             <div className="dice selector">
 
                 <h2>
-                    <RangelimitedInputter name={"numdice"} min={1} max = {10}> </RangelimitedInputter>
+                    <RangelimitedInputter name={"numdice"} min={1} max={10}> </RangelimitedInputter>
                     d
-                    <RangelimitedInputter name={'dicefaces'} min={1} max = {99}> </RangelimitedInputter>
+                    <RangelimitedInputter name={'dicefaces'} min={1} max={99}> </RangelimitedInputter>
                 </h2>
 
             </div>
+
+            <div className="config">
+                <h2>config</h2>
+                <PlayerDataConfig></PlayerDataConfig>
+            </div>
+
             <div className="App-body">
                 <h2>this turn </h2>
                 <InitTable name="bob"></InitTable>
                 <div>
-                <h2> next turn</h2>
+                    <h2> next turn</h2>
                 </div>
-                <InitTable name="joe"></InitTable>
+                <InitTable columns={[
+                    {
+                        accessorKey: 'name',
+                        header: 'Character Name',
+                        size: 200,
+                    }
+                ]}></InitTable>
             </div>
-
 
             <footer className="App-footer">
                 feet
