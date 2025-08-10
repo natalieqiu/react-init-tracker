@@ -1,4 +1,3 @@
-// initialData.ts
 import { TableData } from './types';
 
 export const initData: TableData = [
