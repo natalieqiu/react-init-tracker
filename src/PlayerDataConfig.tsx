@@ -1,7 +1,7 @@
 import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable} from "material-react-table";
 import {useMemo, useState} from "react";
 import type {CharacterBase, TeamColor} from "./types";
-import {Checkbox} from "@mui/material";
+import {Button, Checkbox} from "@mui/material";
 import {playerConfigTestData, playerConfigTestData as data} from "./initData";
 
 interface PlayerDataConfigProps {
@@ -63,6 +63,7 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
 
 
     const handleSaveRow = ({row, values}: { row: any; values: CharacterBase }) => {
+        console.log('in handleSaveRow', row, values);
         setData(prevData =>
             prevData.map(character =>
                 character.id === row.original.id ? {...character, ...values} : character
@@ -96,12 +97,12 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         enableSorting: true,
         enablePagination: false,
         enableEditing: true,
-        enableTableFooter: false,
+        enableTableFooter: true,
 
         //onEditingRowSave:
-        editDisplayMode: 'cell', // Use row editing mode instead of modal
+        editDisplayMode: 'row', // Use row editing mode instead of modal
         onEditingRowSave: handleSaveRow,
-        muiTableBodyRowProps: ({ row }) => {
+        muiTableBodyRowProps: ({row}) => {
             // Type-safe way to get the current team without .find()
             const currentTeam = data[row.index]?.team ?? row.original.team;
             return {
@@ -109,9 +110,36 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
                     backgroundColor: getTeamBackgroundColor(currentTeam),
                     '&:hover': {
                         backgroundColor: getTeamBackgroundColor(currentTeam, 0.5),
+                    },
                 },
-            },
-        };},
+            };
+        },
+        createDisplayMode: "row",
+        positionCreatingRow: "bottom",
+        onCreatingRowSave: ({table, values}) => {
+            //validate data
+            //save data to api
+            table.setCreatingRow(null); //exit creating mode
+        },
+        onCreatingRowCancel: () => {
+            //clear any validation errors
+        },
+        renderTopToolbarCustomActions: ({table}) => (
+            <Button
+                onClick={() => {
+                    table.setCreatingRow(true); //simplest way to open the create row modal with no default values
+                    //or you can pass in a row object to set default values with the `createRow` helper function
+                    // table.setCreatingRow(
+                    //   createRow(table, {
+                    //     //optionally pass in default values for the new row, useful for nested data or other complex scenarios
+                    //   }),
+                    // );
+                }}
+            >
+                Add Combat Entity
+            </Button>
+        )
+
     });
     return <MaterialReactTable table={table}/>;
 };
