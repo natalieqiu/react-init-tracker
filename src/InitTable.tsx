@@ -5,15 +5,16 @@ import {
     type MRT_ColumnDef,
 } from 'material-react-table';
 import {Checkbox} from '@mui/material';
-import {initData} from './initData';
-import type {Character, TableData, TeamColor} from './types';
+//import {initData} from './initData';
+import type {CharacterData, TeamColor} from './types';
 
 interface InitTableProps {
-    columns?: MRT_ColumnDef<Character>[];
+    columns?: MRT_ColumnDef<CharacterData>[];
+    charData?: MRT_ColumnDef<CharacterData>[];
 }
 
-const InitTable = ({columns: columnsProp}: InitTableProps) => {
-    const defaultColumns = useMemo<MRT_ColumnDef<Character>[]>(
+const InitTable = ({charData: dataProp}: InitTableProps) => {
+    const defaultColumns = useMemo<MRT_ColumnDef<CharacterData>[]>(
         () => [
             {
                 accessorKey: 'init',
@@ -46,8 +47,8 @@ const InitTable = ({columns: columnsProp}: InitTableProps) => {
         ],
         [],
     );
-    const columns = columnsProp || defaultColumns;
-    const [data, setData] = useState<TableData>(initData);
+    const columns =  defaultColumns;
+    const [data, setData] = useState<CharacterData >(charData);
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {

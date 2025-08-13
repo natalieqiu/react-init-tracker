@@ -2,7 +2,7 @@ import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable} from "mat
 import {useMemo, useState} from "react";
 import type {CharacterBase, TeamColor} from "./types";
 import {Button, Checkbox} from "@mui/material";
-import {playerConfigTestData, playerConfigTestData as data} from "./initData";
+import {playerConfigTestData, playerConfigTestData as data} from "./types";
 
 interface PlayerDataConfigProps {
     columns?: MRT_ColumnDef<CharacterBase>[];
@@ -21,11 +21,13 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
                 accessorKey: 'initmod',
                 header: 'initmod',
                 size: 150,
+
             },
             {
                 accessorKey: 'name',
                 header: 'name',
                 size: 200,
+
             },
             {
                 accessorKey: 'lair',
@@ -64,11 +66,21 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
 
     const handleSaveRow = ({row, values}: { row: any; values: CharacterBase }) => {
         console.log('in handleSaveRow', row, values);
+        console.log( Number(values.initmod));
+        if ( isNaN(Number(values.initmod)) ) {
+            alert('Initmod must be a number');
+            return;
+        }
+        if ( isNaN(Number(values.turns)) ) {
+            alert('Turns must be a number');
+            return;
+        }
         setData(prevData =>
             prevData.map(character =>
                 character.id === row.original.id ? {...character, ...values} : character
             )
         );
+        table.setEditingRow(null)
     };
 
     // Team color styles
@@ -117,9 +129,22 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         createDisplayMode: "row",
         positionCreatingRow: "bottom",
         onCreatingRowSave: ({table, values}) => {
-            //validate data
-            //save data to api
-            table.setCreatingRow(null); //exit creating mode
+            // Generate a new ID (simple increment for demo - use UUID in production)
+            const newId = crypto.randomUUID(); //data.length > 0 ? Math.max(...data.map(c => c.id)) + 1 : 1;
+
+            const newCharacter: CharacterBase = {
+                id: newId,
+                name: values.name || 'New Character',
+                initmod: Number(values.initmod) || 0,
+                lair: Boolean(values.lair),
+                team: ['red', 'blue', 'green'].includes(values.team)
+                    ? values.team as TeamColor
+                    : 'red', // default to red
+                turns: values.turns ? Number(values.turns) : 1,
+            };
+
+            setData(prev => [...prev, newCharacter]);
+            table.setCreatingRow(null);
         },
         onCreatingRowCancel: () => {
             //clear any validation errors

@@ -36,14 +36,8 @@ function App() {
                 </Button>
             </nav>
             <div className="dice selector">
-
-                <h2>
-                    <RangelimitedInputter name={"numdice"} min={1} max={10}> </RangelimitedInputter>
-
-                </h2>
-
+                <Dice></Dice>
             </div>
-            <Dice></Dice>
 
             <div className="config">
                 <h2>config</h2>
@@ -51,18 +45,7 @@ function App() {
             </div>
 
             <div className="App-body">
-                <h2>this turn </h2>
-                <InitTable name="bob"></InitTable>
-                <div>
-                    <h2> next turn</h2>
-                </div>
-                <InitTable columns={[
-                    {
-                        accessorKey: 'name',
-                        header: 'Character Name',
-                        size: 200,
-                    }
-                ]}></InitTable>
+
             </div>
 
             <footer className="App-footer">
