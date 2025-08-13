@@ -26,6 +26,7 @@ export const playerConfigTestData: CharacterBase[] = [
     {
         id : 1,
         initmod: 1,
+        init: 99,
         name: 'ally',
         lair: false,
         team: 'blue',
@@ -48,3 +49,4 @@ export const playerConfigTestData: CharacterBase[] = [
         turns: 1,
     }
 ];
+

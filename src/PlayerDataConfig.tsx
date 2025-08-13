@@ -137,9 +137,7 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
                 name: values.name || 'New Character',
                 initmod: Number(values.initmod) || 0,
                 lair: Boolean(values.lair),
-                team: ['red', 'blue', 'green'].includes(values.team)
-                    ? values.team as TeamColor
-                    : 'red', // default to red
+                team: 'red', // default to red
                 turns: values.turns ? Number(values.turns) : 1,
             };
 

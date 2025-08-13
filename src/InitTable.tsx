@@ -5,7 +5,7 @@ import {
     type MRT_ColumnDef,
 } from 'material-react-table';
 import {Checkbox} from '@mui/material';
-//import {initData} from './initData';
+import {CharacterInstance, playerConfigTestData} from './types';
 import type {CharacterData, TeamColor} from './types';
 
 interface InitTableProps {
@@ -14,7 +14,7 @@ interface InitTableProps {
 }
 
 const InitTable = ({charData: dataProp}: InitTableProps) => {
-    const defaultColumns = useMemo<MRT_ColumnDef<CharacterData>[]>(
+    const defaultColumns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
         () => [
             {
                 accessorKey: 'init',
@@ -31,24 +31,12 @@ const InitTable = ({charData: dataProp}: InitTableProps) => {
                 header: 'name',
                 size: 200,
             },
-            {
-                accessorKey: 'lair',
-                header: 'lair',
-                Cell: ({cell}) => (
-                    <Checkbox checked={cell.getValue<boolean>()}/>
-                ),
-                size: 150,
-            },
-            {
-                accessorKey: 'team',
-                header: 'team',
-                size: 150,
-            },
+
         ],
         [],
     );
     const columns =  defaultColumns;
-    const [data, setData] = useState<CharacterData >(charData);
+    const [data, setData] = useState<CharacterInstance >(playerConfigTestData);
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
@@ -70,7 +58,7 @@ const InitTable = ({charData: dataProp}: InitTableProps) => {
         enableRowOrdering: true,
         enableSorting: true,
         enablePagination: false,
-        enableEditing: true,
+        enableEditing: false,
         enableTableFooter: false,
         // 1. First define the drag handle configuration
         muiRowDragHandleProps: ({table}) => ({

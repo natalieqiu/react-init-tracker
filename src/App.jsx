@@ -45,7 +45,18 @@ function App() {
             </div>
 
             <div className="App-body">
-
+                <h2>this turn </h2>
+                <InitTable name="bob"></InitTable>
+                <div>
+                    <h2> next turn</h2>
+                </div>
+                <InitTable columns={[
+                    {
+                        accessorKey: 'name',
+                        header: 'Character Name',
+                        size: 200,
+                    }
+                ]}></InitTable>
             </div>
 
             <footer className="App-footer">
