@@ -8,6 +8,7 @@ import {Button} from "@mui/material";
 import RangelimitedInputter from "./RangelimitedInputter.jsx";
 import DualInitTable from "./DualInitTable.js";
 import PlayerDataConfig from "./PlayerDataConfig.js";
+import {playerConfigTestData, playerConfigTestData as data} from "./types";
 
 const click = new Howl({
     src://['./src/assets/deltarune-explosion.mp3']
@@ -19,6 +20,10 @@ const click = new Howl({
 function App() {
     const [count, setCount] = useState(0)
 
+    const [gameData, setGameData] = useState(data)
+    const [table1, setTable1] = useState(data)
+    const [table2, setTable2] = useState(data)
+
     const handleButtonClick = () => {
         setCount(count + 1);
         click.play(); // Play sound when button is clicked
@@ -26,7 +31,7 @@ function App() {
     return (
         <>
             <header className="App-header">
-                <h1> Webbedsite </h1>
+                <h1> Two-turn TTRPG Initiative Autoroller </h1>
             </header>
             <nav className="App-nav">
                 nav
@@ -41,7 +46,7 @@ function App() {
 
             <div className="config">
                 <h2>config</h2>
-                <PlayerDataConfig></PlayerDataConfig>
+                <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
             </div>
 
             <div className="App-body">

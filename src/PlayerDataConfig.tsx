@@ -10,7 +10,8 @@ interface PlayerDataConfigProps {
     columns?: MRT_ColumnDef<CharacterBase>[];
 }
 
-const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
+const PlayerDataConfig = (props) => {
+    const {charData, onChange} = props;
     const defaultColumns = useMemo<MRT_ColumnDef<CharacterBase>[]>(
         () => [
             {
@@ -62,8 +63,9 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         ],
         [],
     );
-    const columns = columnsProp || defaultColumns;
-    const [data, setData] = useState<CharacterBase[]>(playerConfigTestData);
+    const columns =  defaultColumns;
+    //const [data, setData] = useState<CharacterBase[]>(playerConfigTestData);
+    const [data, setData] = useState<CharacterBase[]>(charData);
 
 
     const handleSaveRow = ({row, values}: { row: any; values: CharacterBase }) => {
@@ -119,7 +121,6 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         enableEditing: true,
         enableTableFooter: true,
 
-        //onEditingRowSave:
         editDisplayMode: 'row', // Use row editing mode instead of modal
         onEditingRowSave: handleSaveRow,
         muiTableBodyRowProps: ({row}) => {
