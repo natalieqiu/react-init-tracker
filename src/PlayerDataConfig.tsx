@@ -3,6 +3,8 @@ import {useMemo, useState} from "react";
 import type {CharacterBase, TeamColor} from "./types";
 import {Button, Checkbox} from "@mui/material";
 import {playerConfigTestData, playerConfigTestData as data} from "./types";
+import { Box, IconButton } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
 interface PlayerDataConfigProps {
     columns?: MRT_ColumnDef<CharacterBase>[];
@@ -103,6 +105,12 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
         _rowHoverColor: getTeamBackgroundColor(character.team, 0.5)
     })), [data]);
 
+    const handleDeleteRow = (row: any) => {
+        if (window.confirm('Are you sure you want to delete this row?')) {
+            setData(prevData => prevData.filter(character => character.id !== row.original.id));
+        }
+    };
+
     const table = useMaterialReactTable({
         columns,
         data,
@@ -161,7 +169,14 @@ const PlayerDataConfig = ({columns: columnsProp}: PlayerDataConfigProps) => {
             >
                 Add Combat Entity
             </Button>
-        )
+        ),
+        renderRowActions: ({ row, table }) => (
+            <Box sx={{ display: 'flex', gap: '1rem' }}>
+                <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+                    <Delete />
+                </IconButton>
+            </Box>
+        ),
 
     });
     return <MaterialReactTable table={table}/>;
