@@ -4,7 +4,7 @@ import type {CharacterBase, TeamColor} from "./types";
 import {Button, Checkbox} from "@mui/material";
 import {playerConfigTestData, playerConfigTestData as data} from "./types";
 import { Box, IconButton } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 
 interface PlayerDataConfigProps {
     columns?: MRT_ColumnDef<CharacterBase>[];
@@ -176,7 +176,11 @@ const PlayerDataConfig = (props) => {
                 <IconButton color="error" onClick={() => handleDeleteRow(row)}>
                     <Delete />
                 </IconButton>
+                <IconButton onClick={() => handleSaveRow(row )}>
+                    <Edit />
+                </IconButton>
             </Box>
+
         ),
 
     });

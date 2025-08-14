@@ -26,8 +26,7 @@ export const playerConfigTestData: CharacterBase[] = [
     {
         id : 1,
         initmod: 1,
-        init: 99,
-        name: 'ally',
+        name: 'Ally',
         lair: false,
         team: 'blue',
         turns: 1,
@@ -35,7 +34,7 @@ export const playerConfigTestData: CharacterBase[] = [
     {
         id : 2,
         initmod: 2,
-        name: 'billan',
+        name: 'Bvillan',
         lair: false,
         team: 'red',
         turns: 2,
@@ -43,7 +42,7 @@ export const playerConfigTestData: CharacterBase[] = [
     {
         id : 3,
         initmod: 20,
-        name: 'lair',
+        name: 'Lair action: poison gas',
         lair: true,
         team: 'green',
         turns: 1,

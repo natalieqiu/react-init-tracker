@@ -21,6 +21,9 @@ function App() {
     const [count, setCount] = useState(0)
 
     const [gameData, setGameData] = useState(data)
+
+    //const defaultInstanceOfCharacter =
+
     const [table1, setTable1] = useState(data)
     const [table2, setTable2] = useState(data)
 
@@ -51,7 +54,7 @@ function App() {
 
             <div className="App-body">
                 <h2>this turn </h2>
-                <InitTable name="bob"></InitTable>
+                <InitTable name="bob" charData={gameData}></InitTable> //update when gameData is updated.
                 <div>
                     <h2> next turn</h2>
                 </div>
