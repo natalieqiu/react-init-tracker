@@ -374,3 +374,5 @@ function validateUser(user: User) {
         email: !validateEmail(user.email) ? 'Incorrect Email Format' : '',
     };
 }
+
+

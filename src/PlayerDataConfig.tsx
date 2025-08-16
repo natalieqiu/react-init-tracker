@@ -1,8 +1,7 @@
 import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable} from "material-react-table";
-import {useMemo, useState} from "react";
+import  {useMemo, useState} from "react";
 import type {CharacterBase, TeamColor} from "./types";
-import {Button, Checkbox} from "@mui/material";
-import {playerConfigTestData, playerConfigTestData as data} from "./types";
+import {Button, Checkbox, FormControlLabel} from "@mui/material";
 import { Box, IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 
@@ -35,15 +34,29 @@ const PlayerDataConfig = (props) => {
             {
                 accessorKey: 'lair',
                 header: 'lair',
+                Edit: (props) => {
+                    const [isChecked, setIsChecked] = useState(props.cell.getValue() as boolean);
+                    return (
+                        <FormControlLabel
+                            key={props.column.id}
+                            control={
+                                <Checkbox
+                                    name={props.column.id}
+                                    checked={isChecked}
+                                    value={isChecked}
+                                    onChange={(e) => {
+                                        setIsChecked(e.target.checked);
+                                        props.row._valuesCache[props.column.id] = e.target.checked;
+                                    }}
+                                />
+                            }
+                            label={props.column.id}
+                        />
+                    )
+                },
                 Cell: ({cell}) => (
-                    <Checkbox checked={cell.getValue<boolean>()} disabled/>
-                ),
-                Edit: ({cell, column, row, table}) => (
                     <Checkbox
-                        checked={row._valuesCache[column.id] ?? cell.getValue()}
-                        onChange={(e) => {
-                            row._valuesCache[column.id] = e.target.checked;
-                        }}
+                        checked={cell.getValue() as boolean}
                     />
                 ),
                 size: 150,
@@ -79,12 +92,13 @@ const PlayerDataConfig = (props) => {
             alert('Turns must be a number');
             return;
         }
-        setData(prevData =>
-            prevData.map(character =>
-                character.id === row.original.id ? {...character, ...values} : character
-            )
+        const newData = data.map(character =>
+            character.id === row.original.id ? {...character, ...values} : character
         );
-        table.setEditingRow(null)
+
+        setData(newData);
+        table.setEditingRow(null);
+        onChange?.(newData); // Notify parent of changes
     };
 
     // Team color styles
@@ -109,7 +123,9 @@ const PlayerDataConfig = (props) => {
 
     const handleDeleteRow = (row: any) => {
         if (window.confirm('Are you sure you want to delete this row?')) {
-            setData(prevData => prevData.filter(character => character.id !== row.original.id));
+            const newData = data.filter(character => character.id !== row.original.id);
+            setData(newData);
+            onChange?.(newData); // Notify parent of changes
         }
     };
 
@@ -146,7 +162,7 @@ const PlayerDataConfig = (props) => {
                 name: values.name || 'New Character',
                 initmod: Number(values.initmod) || 0,
                 lair: Boolean(values.lair),
-                team: 'red', // default to red
+                team: values.team || 'red', // default to red
                 turns: values.turns ? Number(values.turns) : 1,
             };
 
@@ -176,7 +192,7 @@ const PlayerDataConfig = (props) => {
                 <IconButton color="error" onClick={() => handleDeleteRow(row)}>
                     <Delete />
                 </IconButton>
-                <IconButton onClick={() => handleSaveRow(row )}>
+                <IconButton onClick={() => table.setEditingRow(row )}>
                     <Edit />
                 </IconButton>
             </Box>

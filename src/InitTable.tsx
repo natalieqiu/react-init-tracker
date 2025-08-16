@@ -13,7 +13,8 @@ interface InitTableProps {
     charData?: MRT_ColumnDef<CharacterData>[];
 }
 
-const InitTable = ({charData: dataProp}: InitTableProps) => {
+const InitTable = (props) => {
+    const {charData} = props;
     const defaultColumns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
         () => [
             {
@@ -36,7 +37,7 @@ const InitTable = ({charData: dataProp}: InitTableProps) => {
         [],
     );
     const columns =  defaultColumns;
-    const [data, setData] = useState<CharacterInstance >(playerConfigTestData);
+    const [data, setData] = useState<CharacterInstance[] >(charData);
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
