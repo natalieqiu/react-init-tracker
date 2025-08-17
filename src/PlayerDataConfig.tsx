@@ -166,8 +166,10 @@ const PlayerDataConfig = (props) => {
                 turns: values.turns ? Number(values.turns) : 1,
             };
 
-            setData(prev => [...prev, newCharacter]);
+            const newData = [...data, newCharacter];
+            setData(newData);
             table.setCreatingRow(null);
+            onChange?.(newData); // Notify parent of new row
         },
         onCreatingRowCancel: () => {
             //clear any validation errors

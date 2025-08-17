@@ -22,6 +22,9 @@ function App() {
 
     const [gameData, setGameData] = useState(data)
 
+    const [numdice, setnumdice] = useState(2);
+    const [numfaces, setnumfaces] = useState(6);
+
     const [table1, setTable1] = useState(data)
     const [table2, setTable2] = useState(data)
 
@@ -41,12 +44,19 @@ function App() {
                     {count}
                 </Button>
             </nav>
-            <div className="dice selector">
-                <Dice></Dice>
+
+            <div className="dice duce number setter">
+                <>
+                    <RangelimitedInputter value={numdice} onChange={setnumdice}></RangelimitedInputter>
+                    <h2> {numdice} d {numfaces} </h2>
+                    <RangelimitedInputter max={1000} value={numfaces} onChange={setnumfaces}></RangelimitedInputter>
+                </>
+
             </div>
 
             <div className="config">
                 <h2>config</h2>
+                {gameData.toString()}
                 <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
             </div>
 

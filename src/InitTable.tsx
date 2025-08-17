@@ -14,7 +14,7 @@ interface InitTableProps {
 }
 
 const InitTable = (props) => {
-    const {charData} = props;
+    const {charData, numdice, numfaces} = props;
     const defaultColumns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
         () => [
             {
