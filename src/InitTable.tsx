@@ -1,10 +1,10 @@
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
     type MRT_ColumnDef,
 } from 'material-react-table';
-import {Checkbox} from '@mui/material';
+import {Button, Checkbox} from '@mui/material';
 import {CharacterInstance, playerConfigTestData} from './types';
 import type {CharacterData, TeamColor} from './types';
 
@@ -15,6 +15,20 @@ interface InitTableProps {
 
 const InitTable = (props) => {
     const {charData, numdice, numfaces} = props;
+    const [internalnumdice, setinternalnumdice] = useState(numdice);
+    const [internalnumfaces, setinternalnumfaces] = useState(numfaces);
+
+    useEffect(() => {
+        setinternalnumfaces(numdice);
+        console.log('numfaces changed');
+    }), [numdice]
+
+    useEffect(() => {
+        setinternalnumfaces(numfaces);
+        console.log('numfaces changed');
+    }), [numfaces]
+
+
     const defaultColumns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
         () => [
             {
@@ -37,7 +51,21 @@ const InitTable = (props) => {
         [],
     );
     const columns =  defaultColumns;
+
+    const roll1Dice = () =>
+        [...Array(internalnumdice)].reduce(sum => sum + Math.floor(Math.random() * internalnumfaces) + 1, 0);
+    const handleDebugRoll = () => {
+        const rollResult = roll1Dice();
+        setResult(rollResult);
+    };
+    const [result, setResult] = useState(null);
+
+
     const [data, setData] = useState<CharacterInstance[] >(charData);
+
+    useEffect(() => {
+        setData(charData);
+    }, [charData]);
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
@@ -87,7 +115,13 @@ const InitTable = (props) => {
             },
         }),
     });
-    return <MaterialReactTable table={table}/>;
+    return (
+        <>
+            <Button onClick={handleDebugRoll}> Roll! </Button>
+            {result !== null && (<p>You rolled: {result}</p>)}
+            <MaterialReactTable table={table}/>
+            </>
+    )
 };
 
 export default InitTable;
