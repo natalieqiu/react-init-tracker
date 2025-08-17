@@ -7,11 +7,21 @@ import {
 import {Button, Checkbox} from '@mui/material';
 import {CharacterInstance, playerConfigTestData} from './types';
 import type {CharacterData, TeamColor} from './types';
+import {Howl} from 'howler';
 
 interface InitTableProps {
     columns?: MRT_ColumnDef<CharacterData>[];
     charData?: MRT_ColumnDef<CharacterData>[];
 }
+
+const diceClacks = ['splash', 'splash1', 'splash2', 'splash3', 'splash4', 'splash5'];
+const howls = {};
+for (var i=0; i<diceClacks.length; i++) {
+    howls[diceClacks[i]] = new Howl({
+        urls: [diceClacks[i] + '.mp3', diceClacks[i] + '.ogg']
+    });
+}
+
 
 const InitTable = (props) => {
     const {charData, numdice, numfaces} = props;
@@ -19,14 +29,14 @@ const InitTable = (props) => {
     const [internalnumfaces, setinternalnumfaces] = useState(numfaces);
 
     useEffect(() => {
-        setinternalnumfaces(numdice);
-        console.log('numfaces changed');
-    }), [numdice]
+        setinternalnumdice(numdice);
+        console.log('numdice changed');
+    }, [numdice])
 
     useEffect(() => {
         setinternalnumfaces(numfaces);
         console.log('numfaces changed');
-    }), [numfaces]
+    }, [numfaces])
 
 
     const defaultColumns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
@@ -56,13 +66,11 @@ const InitTable = (props) => {
         [...Array(internalnumdice)].reduce(sum => sum + Math.floor(Math.random() * internalnumfaces) + 1, 0);
     const handleDebugRoll = () => {
         const rollResult = roll1Dice();
-        setResult(rollResult);
+        setdbgrResult(rollResult);
     };
-    const [result, setResult] = useState(null);
-
+    const [debugroll, setdbgrResult] = useState(null);
 
     const [data, setData] = useState<CharacterInstance[] >(charData);
-
     useEffect(() => {
         setData(charData);
     }, [charData]);
@@ -117,8 +125,9 @@ const InitTable = (props) => {
     });
     return (
         <>
+            {numdice} {numfaces} and {internalnumdice} {internalnumfaces}
             <Button onClick={handleDebugRoll}> Roll! </Button>
-            {result !== null && (<p>You rolled: {result}</p>)}
+            {debugroll !== null && (<p>You rolled: {debugroll}</p>)}
             <MaterialReactTable table={table}/>
             </>
     )

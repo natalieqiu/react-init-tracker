@@ -8,7 +8,7 @@ import {Button} from "@mui/material";
 import RangelimitedInputter from "./RangelimitedInputter.jsx";
 import DualInitTable from "./DualInitTable.js";
 import PlayerDataConfig from "./PlayerDataConfig.js";
-import {playerConfigTestData, playerConfigTestData as data} from "./types";
+import { playerConfigTestData as data} from "./types";
 
 const click = new Howl({
     src://['./src/assets/deltarune-explosion.mp3']
@@ -62,7 +62,7 @@ function App() {
 
             <div className="App-body">
                 <h2>this turn </h2>
-                <InitTable name="bob" charData={gameData}></InitTable> //update when gameData is updated.
+                <InitTable name="bob" charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable> //update when gameData is updated.
 
                     <h2> next turn</h2>
             </div>
