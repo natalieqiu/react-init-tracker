@@ -1,24 +1,16 @@
 import {useEffect, useMemo, useState} from 'react';
-import {
-    MaterialReactTable,
-    useMaterialReactTable,
-    type MRT_ColumnDef,
-} from 'material-react-table';
-import {Button, Checkbox} from '@mui/material';
-import {CharacterInstance, playerConfigTestData} from './types';
-import type {CharacterData, TeamColor} from './types';
+import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable,} from 'material-react-table';
+import {Button} from '@mui/material';
+import type {TeamColor} from './types';
+import {CharacterInstance} from './types';
 import {Howl} from 'howler';
 
-interface InitTableProps {
-    columns?: MRT_ColumnDef<CharacterData>[];
-    charData?: MRT_ColumnDef<CharacterData>[];
-}
-
-const diceClacks = ['splash', 'splash1', 'splash2', 'splash3', 'splash4', 'splash5'];
+//const diceClacks =
+const numDiceSfxs = 10;
 const howls = {};
-for (var i=0; i<diceClacks.length; i++) {
-    howls[diceClacks[i]] = new Howl({
-        urls: [diceClacks[i] + '.mp3', diceClacks[i] + '.ogg']
+for (let i=0; i < numDiceSfxs; i++) { //10 dice roll sounds in folder labeled 1-9
+    howls[i] = new Howl({
+        src: ['./src/assets/roll' + i + '.mp3', './src/assets/roll' + i + '.ogg']
     });
 }
 
@@ -39,7 +31,7 @@ const InitTable = (props) => {
     }, [numfaces])
 
 
-    const defaultColumns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
+    const columns =  useMemo<MRT_ColumnDef<CharacterInstance>[]>(
         () => [
             {
                 accessorKey: 'init',
@@ -60,12 +52,13 @@ const InitTable = (props) => {
         ],
         [],
     );
-    const columns =  defaultColumns;
 
     const roll1Dice = () =>
         [...Array(internalnumdice)].reduce(sum => sum + Math.floor(Math.random() * internalnumfaces) + 1, 0);
     const handleDebugRoll = () => {
         const rollResult = roll1Dice();
+        howls[Math.floor(Math.random() * numDiceSfxs)].play();
+
         setdbgrResult(rollResult);
     };
     const [debugroll, setdbgrResult] = useState(null);
