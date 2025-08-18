@@ -3,7 +3,7 @@ import React, {useState, useEffect } from "react";
 
 function RangelimitedInputter(props) { //default step
     const { min=1, max = 20, step = 1, value = min, onChange } = props;
-    const [num, setNum] = useState(min);
+    const [num, setNum] = useState(value);
     const [inputVal, setInputVal] = useState(num.toString() );
 
     // Sync internal state when external value changes
