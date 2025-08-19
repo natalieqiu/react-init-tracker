@@ -4,7 +4,7 @@ import InitTable from "./InitTable.jsx";
 import Dice from './Dice.jsx'
 //import dice from "./Dice.jsx";
 import {Howl} from 'howler';
-import {Button} from "@mui/material";
+import {Button, Collapse} from "@mui/material";
 import RangelimitedInputter from "./RangelimitedInputter.jsx";
 import DualInitTable from "./DualInitTable.js";
 import PlayerDataConfig from "./PlayerDataConfig.js";
@@ -25,13 +25,13 @@ function App() {
     const [numdice, setnumdice] = useState(2);
     const [numfaces, setnumfaces] = useState(6);
 
-    const [table1, setTable1] = useState(data)
-    const [table2, setTable2] = useState(data)
-
     const handleButtonClick = () => {
         setCount(count + 1);
         click.play(); // Play sound when button is clicked
     }
+
+    const [openConfig, setOpenConfig] = useState(true);
+
     return (
         <>
             <header className="App-header">
@@ -45,9 +45,9 @@ function App() {
                 </Button>
             </nav>
 
-            <div className="dice duce number setter">
+            <div className="dice setter">
                 <>
-                    <RangelimitedInputter value={numdice} onChange={setnumdice}></RangelimitedInputter>
+                    <RangelimitedInputter min={0} value={numdice} onChange={setnumdice}></RangelimitedInputter>
                     <h2> {numdice} d {numfaces} </h2>
                     <RangelimitedInputter max={1000} value={numfaces} onChange={setnumfaces}></RangelimitedInputter>
                 </>
@@ -55,16 +55,25 @@ function App() {
             </div>
 
             <div className="config">
-                <h2>config</h2>
-                {gameData.toString()}
-                <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
+                <Button size={"large"} variant={"text"} onClick={() => setOpenConfig(!openConfig)}>{openConfig? 'hide' : 'open'} Character Config</Button>
+                <Collapse in={openConfig}>
+                    <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
+                </Collapse>
+
             </div>
 
             <div className="App-body">
-                <h2>this turn </h2>
-                <InitTable name="bob" charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable> //update when gameData is updated.
+                <div className="thisturn">
+                    <h2>This Turn:</h2>
+                    <InitTable charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable>
+                </div>
 
-                    <h2> next turn</h2>
+                <div className="nextturn">
+                    <h2>Upcoming Turn:</h2>
+                    <InitTable charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable>
+                </div>
+
+
             </div>
 
             <footer className="App-footer">

@@ -4,10 +4,18 @@ import type {CharacterBase, TeamColor} from "./types";
 import {Button, Checkbox, FormControlLabel} from "@mui/material";
 import { Box, IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
+import {Howl} from 'howler';
 
 interface PlayerDataConfigProps {
     columns?: MRT_ColumnDef<CharacterBase>[];
 }
+
+const deletesound = new Howl({
+    src: ['./src/assets/deltarune-explosion.mp3'],
+});
+const createsound= new Howl({
+    src: ['./src/assets/ralsei-splat.mp3'],
+});
 
 const PlayerDataConfig = (props) => {
     const {charData, onChange} = props;
@@ -88,8 +96,11 @@ const PlayerDataConfig = (props) => {
             alert('Initmod must be a number');
             return;
         }
-        if ( isNaN(Number(values.turns)) ) {
-            alert('Turns must be a number');
+        const turns = Number(values.turns);
+        const isValid = !isNaN(turns) && turns >= 1 && Number.isInteger(turns);
+
+        if (!isValid) {
+            alert('Turns must be a whole number of at least 1');
             return;
         }
         const newData = data.map(character =>
@@ -126,6 +137,7 @@ const PlayerDataConfig = (props) => {
             const newData = data.filter(character => character.id !== row.original.id);
             setData(newData);
             onChange?.(newData); // Notify parent of changes
+            deletesound.play();
         }
     };
 
@@ -156,6 +168,7 @@ const PlayerDataConfig = (props) => {
         onCreatingRowSave: ({table, values}) => {
             // Generate a new ID (simple increment for demo - use UUID in production)
             const newId = crypto.randomUUID(); //data.length > 0 ? Math.max(...data.map(c => c.id)) + 1 : 1;
+            const isValid = !isNaN(values.turns ) && values.turns  >= 1 && Number.isInteger(values.turns );
 
             const newCharacter: CharacterBase = {
                 id: newId,
@@ -163,13 +176,14 @@ const PlayerDataConfig = (props) => {
                 initmod: Number(values.initmod) || 0,
                 lair: Boolean(values.lair),
                 team: values.team || 'red', // default to red
-                turns: values.turns ? Number(values.turns) : 1,
+                turns: isValid ? Number(values.turns) : 1,
             };
 
             const newData = [...data, newCharacter];
             setData(newData);
             table.setCreatingRow(null);
             onChange?.(newData); // Notify parent of new row
+            createsound.play();
         },
         onCreatingRowCancel: () => {
             //clear any validation errors

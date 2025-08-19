@@ -43,3 +43,12 @@
 
 div {
 }
+.dice.setter{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.App-body{
+  background-color: #000000;
+}
