@@ -42,7 +42,7 @@ function App() {
     return (
         <>
             <header className="App-header">
-                <h1> Two-turn TTRPG Initiative Autoroller </h1>
+                <h1> Two-turn TTRPG Initiative Autoroller v.1.0</h1>
             </header>
             <nav className="App-nav">
 

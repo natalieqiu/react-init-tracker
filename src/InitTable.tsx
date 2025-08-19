@@ -16,6 +16,7 @@ for (let i = 0; i < numDiceSfxs; i++) { //10 dice roll sounds in folder labeled 
 const playRandomDice = () => {
     howls[Math.floor(Math.random() * numDiceSfxs)].play();
 };
+const resetSound = new Howl({src: ['./src/assets/klonk.mp3']});
 
 interface InitTableProps {
     charData: CharacterBase[],
@@ -25,7 +26,7 @@ interface InitTableProps {
 }
 
 const InitTable = (props: InitTableProps) => {
-        const {charData, numdice, numfaces, rerolltrigger =1} = props;
+        const {charData, numdice, numfaces, rerolltrigger = 1} = props;
         const [internalnumdice, setinternalnumdice] = useState(numdice);
         const [internalnumfaces, setinternalnumfaces] = useState(numfaces);
 
@@ -296,22 +297,23 @@ const InitTable = (props: InitTableProps) => {
         return (
             <>
 
-                { !isSortedByInit && (<Button variant={"outlined"}
-                        onClick={() => {
-                            if (!isSortedByInit) {
-                                setData(prevData =>
-                                    //    [...prevData] creates a new array copy  and   .sort() now operates on the copy
-                                    [...prevData].sort(initiativeSort)
-                                );
-                                setIsSortedByInit(true);
-                            } else {
-                                playRandomDice();
-                            }
-                        }}
+                {!isSortedByInit && (<Button variant={"outlined"}
+                                             onClick={() => {
+                                                 if (!isSortedByInit) {
+                                                     setData(prevData =>
+                                                         //    [...prevData] creates a new array copy  and   .sort() now operates on the copy
+                                                         [...prevData].sort(initiativeSort)
+                                                     );
+                                                     setIsSortedByInit(true);
+                                                     resetSound.play();
+                                                 } else {
+                                                     playRandomDice();
+                                                 }
+                                             }}
 
-                >
-                    {isSortedByInit ? ":)" : "Reset to Original Order"}
-                </Button>
+                    >
+                        {isSortedByInit ? ":)" : "Reset to Original Order"}
+                    </Button>
                 )}
 
 
