@@ -214,14 +214,7 @@ const InitTable = (props: InitTableProps) => {
         }),
     });
     const [isSortedByInit, setIsSortedByInit] = useState(true);
-    const resortInit = () => {
-        const reSortedData = [...data].sort((a, b) =>
-            (b.init - a.init === 0) ? b.initmod - a.initmod : b.init - a.init
-        );
-        setData(reSortedData); // Update state with newly sorted data
-        table.setSorting([{id: 'init', desc: true}]); // Sync UI sort
-        setIsSortedByInit(true);
-    }
+
     return (
         <>
             {numdice} {numfaces} and {internalnumdice} {internalnumfaces}
@@ -230,7 +223,11 @@ const InitTable = (props: InitTableProps) => {
             <button
                 onClick={() => {
                     if (!isSortedByInit) {
-                        resortInit;
+                        setData(prevData =>
+                            prevData.sort((a, b) =>
+                                (b.init - a.init === 0) ? b.initmod - a.initmod : b.init - a.init)) // this is a new array?
+
+                        setIsSortedByInit(true);
                     } else {
                         howls[Math.floor(Math.random() * numDiceSfxs)].play();
                     }
