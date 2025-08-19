@@ -1,5 +1,12 @@
 import React, {useState, useEffect } from "react";
+import {Howl} from "howler";
 //import { useNumber } from "./NumberContext"; // Import the hook
+
+const click = new Howl({
+    src://['./src/assets/deltarune-explosion.mp3']
+        ['./src/assets/mouse-click.mp3'],
+    // './assets/mouse-click.mp3'], // Provide multiple formats for browser compatibility
+});
 
 function RangelimitedInputter(props) { //default step
     const { min=1, max = 20, step = 1, value = min, onChange } = props;
@@ -44,9 +51,11 @@ function RangelimitedInputter(props) { //default step
 
     function increment() {
         updateValue( Math.min(num+step, max));
+        click.play()
     }
     function decrement() {
         updateValue( Math.max(num-step, min));
+        click.play()
     }
 
     return (

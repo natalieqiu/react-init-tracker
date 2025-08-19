@@ -120,6 +120,7 @@ const InitTable = (props: InitTableProps) => {
                 prevData.map(char => rerollInit(char)).sort(initiativeSort) // Creates NEW array
             );
             //resortInit();
+            setIsSortedByInit(true);
         }, [numdice, numfaces, rerolltrigger]);
 
         const [data, setData] = useState<CharacterInstance[]>(convertAllData(charData));
@@ -295,7 +296,7 @@ const InitTable = (props: InitTableProps) => {
         return (
             <>
 
-                <Button variant={"outlined"}
+                { !isSortedByInit && (<Button variant={"outlined"}
                         onClick={() => {
                             if (!isSortedByInit) {
                                 setData(prevData =>
@@ -311,10 +312,14 @@ const InitTable = (props: InitTableProps) => {
                 >
                     {isSortedByInit ? ":)" : "Reset to Original Order"}
                 </Button>
+                )}
+
+
                 <Button onClick={() => {
                     setData(prevData =>
                         prevData.map(char => rerollInit(char)).sort(initiativeSort) // Creates NEW array
                     );
+                    setIsSortedByInit(true);
                     playRandomDice();
                 }}>
                     Reroll Turn

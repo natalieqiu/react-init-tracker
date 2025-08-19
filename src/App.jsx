@@ -10,28 +10,18 @@ import DualInitTable from "./DualInitTable.js";
 import PlayerDataConfig from "./PlayerDataConfig.js";
 import { playerConfigTestData as data} from "./types";
 
-const click = new Howl({
-    src://['./src/assets/deltarune-explosion.mp3']
-        ['./src/assets/mouse-click.mp3'],
-    // './assets/mouse-click.mp3'], // Provide multiple formats for browser compatibility
-});
 const nextTurnSound= new Howl ({src:['./src/assets/swoosh-sound-effects.mp3']});
 
 function App() {
-    const [count, setCount] = useState(0)
 
     const [gameData, setGameData] = useState(data)
 
     const [numdice, setnumdice] = useState(2);
     const [numfaces, setnumfaces] = useState(6);
 
-    const handleButtonClick = () => {
-        setCount(count + 1);
-        click.play(); // Play sound when button is clicked
-    }
 
     const [openConfig, setOpenConfig] = useState(true);
-    const [turnCounter, setTurnCounter] = useState(0);
+    const [turnCounter, setTurnCounter] = useState(1);
 
 
     const handleNextTurn = () => {
@@ -48,17 +38,14 @@ function App() {
     },[turnCounter])
     const [turn2Trigger, setTurn2Trigger] = useState(0);
 
+    const [columnVersion, setColumnVersion] = useState(false);
     return (
         <>
             <header className="App-header">
                 <h1> Two-turn TTRPG Initiative Autoroller </h1>
             </header>
             <nav className="App-nav">
-                nav
-                <Button variant={"outlined"} size={"large"}
-                        onClick={handleButtonClick}>
-                    {count}
-                </Button>
+
             </nav>
 
             <div className="dice setter">
@@ -71,17 +58,20 @@ function App() {
             </div>
 
             <div className="config">
-                <Button size={"large"} variant={"text"} onClick={() => setOpenConfig(!openConfig)}>{openConfig? 'hide' : 'open'} Character Config</Button>
+                <Button size={"large"} variant={'outlined'} onClick={() => setOpenConfig(!openConfig)}>
+                    {openConfig? 'hide' : 'open'} Character Config</Button>
                 <Collapse in={openConfig}>
                     <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
                 </Collapse>
 
+
             </div>
+            <Button size={"large"} variant={'outlined'} onClick={() => setColumnVersion(!columnVersion)}>
+                switch to {columnVersion ? 'horizontal' : 'vertical' } view</Button>
+            <div className={`App-body ${columnVersion ? '' : 'row'}`}>
 
-            <div className="App-body">
-                <h2 className={'header this turn'}> Turn {turnCounter}:</h2>
                 <div className={`inittable thisturn ${turnCounter%2 ? 'switched' : ''}`}>
-
+                    <h2 className={'header this turn'}> {turnCounter % 2 ? 'Upcoming':'Turn ' + turnCounter }:</h2>
                     <InitTable className="table1" charData={gameData} numdice={numdice} numfaces={numfaces}
                                rerolltrigger={turn1Trigger}> </InitTable>
                 </div>
@@ -90,9 +80,9 @@ function App() {
                     //make swap table 2 and table 1? and then reroll the new table 2.
                     handleNextTurn()
                 }}> <h2> NEXT TURN </h2></Button>
-                <h2 className={'header next turn'}>Upcoming Turn:</h2>
-                <div className={`inittable nextturn ${turnCounter%2 ? 'switched' : ''}`}>
 
+                <div className={`inittable nextturn ${turnCounter%2 ? 'switched' : ''}`}>
+                    <h2 className={'header next turn'}>{turnCounter % 2 ? 'Turn ' + turnCounter : 'Upcoming'}</h2>
                     <InitTable className = "table2" charData={gameData} numdice={numdice} numfaces={numfaces} rerolltrigger={turn2Trigger}></InitTable>
                 </div>
 
@@ -100,7 +90,7 @@ function App() {
             </div>
 
             <footer className="App-footer">
-                feet
+                Copyright © 2025 Natalie Qiu. All Rights Reserved.
             </footer>
         </>
     )

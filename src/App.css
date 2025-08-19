@@ -33,15 +33,8 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-div {
+.config{
+  margin: 5% auto;
 }
 .dice.setter{
   display: flex;
@@ -54,8 +47,10 @@ div {
   text-align: center;
   display: flex;
   flex-direction: column;
-  padding: 1em;
   border-radius: 15px;
+}
+.App-body.row{
+  flex-direction: row;
 }
 .header.this.turn{
   order:0;
@@ -68,6 +63,7 @@ div {
 }
 
 .button.next{
+  margin: 5% ;
   order: 2;
 }
 .header.next.turn{
@@ -75,8 +71,11 @@ div {
 }
 .thisturn.switched {
   order: 4;
+
+
 }
 .nextturn{
   order: 4;
+
 }
 
