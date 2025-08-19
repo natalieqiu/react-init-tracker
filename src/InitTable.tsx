@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable,} from 'material-react-table';
 import {Button} from '@mui/material';
 import type {CharacterBase, TeamColor} from './types';
@@ -8,7 +8,7 @@ import {Howl} from 'howler';
 //const diceClacks =
 const numDiceSfxs = 10;
 const howls = {};
-for (let i=0; i < numDiceSfxs; i++) { //10 dice roll sounds in folder labeled 1-9
+for (let i = 0; i < numDiceSfxs; i++) { //10 dice roll sounds in folder labeled 1-9
     howls[i] = new Howl({
         src: ['./src/assets/roll' + i + '.mp3', './src/assets/roll' + i + '.ogg']
     });
@@ -36,7 +36,7 @@ const InitTable = (props: InitTableProps) => {
     }, [numfaces])
 
 
-    const columns =  useMemo<MRT_ColumnDef<CharacterInstance>[]>(
+    const columns = useMemo<MRT_ColumnDef<CharacterInstance>[]>(
         () => [
             {
                 accessorKey: 'init',
@@ -68,7 +68,17 @@ const InitTable = (props: InitTableProps) => {
     };
     const [debugroll, setdbgrResult] = useState(null);
 
-    const createOneCharInstance = (c:CharacterBase): CharacterInstance =>{
+    const rerollInit = (character: CharacterInstance): CharacterInstance => {
+        // Explicitly type the roll variable
+        const roll = roll1Dice();
+        return {
+            ...character,
+            roll: roll,
+            init: character.lair ? character.initmod : roll + character.initmod,
+        };
+    };
+
+    const createOneCharInstance = (c: CharacterBase): CharacterInstance => {
         const roll = roll1Dice();
         return {
             id: c.id,  // Added unique identifier
@@ -83,28 +93,64 @@ const InitTable = (props: InitTableProps) => {
             init: Boolean(c.lair) ? c.initmod : roll + c.initmod
         };
     }
-    const updateCharData=()=>{
-        console.log('heres when we would updateCharData');
-    }
 
-    const convertAllData = ( d: CharacterBase[] ): CharacterInstance[] =>{
+    const convertAllData = (d: CharacterBase[]): CharacterInstance[] => {
         //for all unique ids in config:
         const result = [];
-        for (let i=0; i < d.length; i++) {
+        for (let i = 0; i < d.length; i++) {
             //for number of turns listed: create 1 instance
-            for (let j=0; j< Number(d[i].turns) ; j++) {
-                result.push( createOneCharInstance(d[i]) )
+            for (let j = 0; j < Number(d[i].turns); j++) {
+                result.push(createOneCharInstance(d[i]))
             }
         }
-        result.sort((a:CharacterInstance, b:CharacterInstance) => b.initmod - a.initmod);
+        result.sort((a: CharacterInstance, b: CharacterInstance) =>
+            (b.init - a.init == 0) ? b.initmod - a.initmod : b.init - a.init);
         return result;
     }
-
-    const [data, setData] = useState<CharacterInstance[] >(convertAllData(charData));
-
+    //if numdice change, reroll and resort
     useEffect(() => {
-        updateCharData();
+        setData(prevData =>
+            prevData.map(char => rerollInit(char)).sort((a, b) =>
+                (b.init - a.init === 0) ? b.initmod - a.initmod : b.init - a.init) // Creates NEW array
+        );
+        //resortInit();
+    }, [numdice, numfaces]);
+
+    const [data, setData] = useState<CharacterInstance[]>(convertAllData(charData));
+    const prevCharDataRef = useRef<CharacterBase[]>();
+
+    //two hooks for safety
+    useEffect(() => {
+        prevCharDataRef.current = charData;
+
+    });
+
+    const addNewChars = () => {
+        const newIds = new Set();
+    }
+
+    const removeDeletedCharacters = () => {
+        const validIds = new Set(charData.map((item: CharacterBase) => item.id));
+        setData((prev: CharacterInstance[]) => prev.filter(item => validIds.has(item.id)));
+    };
+    //update data if changes:
+    //compare prevCharDataRef.current (old data) with the new charData (current data)
+    useEffect(() => {
+        if (prevCharDataRef.current) {
+            //here, its different. we just need to figre out how:
+            //check for added character row
+
+            //check for deleted character
+            removeDeletedCharacters()
+            //check for change in turn number
+
+            //easy stuff = name, initmod, color...
+
+        }
+
+        prevCharDataRef.current = charData; // Update ref for next render
     }, [charData]);
+
 
     // Team color styles
     const getTeamBackgroundColor = (team: TeamColor, opacity = 0.3) => {
@@ -124,22 +170,26 @@ const InitTable = (props: InitTableProps) => {
         columns,
         data,
         enableRowOrdering: true,
-        enableSorting: true,
+
+        enableColumnActions: false,
+        enableSorting: false,
+
         enablePagination: false,
         enableEditing: false,
         enableTableFooter: false,
+        enableTopToolbar: false,
         //have it initially sorted from largest to smallest
-     /*   initialState: {
-            sorting: [{id: 'init', // This should match your accessorKey
-                    desc: true, // Sorts in descending order (highest initiative first)
-                }]},*/
+        /*   initialState: {
+               sorting: [{id: 'init', // This should match your accessorKey
+                       desc: true, // Sorts in descending order (highest initiative first)
+                   }]},*/
         // 1. First define the drag handle configuration
         muiRowDragHandleProps: ({table}) => ({
-            onDragStart: () => {
-                table.setSorting([]); // Clear sorting when dragging starts
-            },
+            //onDragStart: () => {
+            //table.setSorting([]); // Clear sorting when dragging starts
+            //},
             onDragEnd: () => {
-                const { draggingRow, hoveredRow } = table.getState();
+                const {draggingRow, hoveredRow} = table.getState();
                 if (hoveredRow && draggingRow) {
                     const newData = [...data];
                     newData.splice(
@@ -148,6 +198,7 @@ const InitTable = (props: InitTableProps) => {
                         newData.splice(draggingRow.index, 1)[0],
                     );
                     setData(newData);
+                    setIsSortedByInit(false);
                 }
             },
         }),
@@ -162,13 +213,33 @@ const InitTable = (props: InitTableProps) => {
             },
         }),
     });
+    const [isSortedByInit, setIsSortedByInit] = useState(true);
+    const resortInit = () => {
+        const reSortedData = [...data].sort((a, b) =>
+            (b.init - a.init === 0) ? b.initmod - a.initmod : b.init - a.init
+        );
+        setData(reSortedData); // Update state with newly sorted data
+        table.setSorting([{id: 'init', desc: true}]); // Sync UI sort
+        setIsSortedByInit(true);
+    }
     return (
         <>
             {numdice} {numfaces} and {internalnumdice} {internalnumfaces}
             <Button onClick={handleDebugRoll}> Roll! </Button>
             {debugroll !== null && (<p>You rolled: {debugroll}</p>)}
+            <button
+                onClick={() => {
+                    if (!isSortedByInit) {
+                        resortInit;
+                    } else {
+                        howls[Math.floor(Math.random() * numDiceSfxs)].play();
+                    }
+                }}
+            >
+                {isSortedByInit ? ":)" : "Reset to Original Order"}
+            </button>
             <MaterialReactTable table={table}/>
-            </>
+        </>
     )
 };
 
