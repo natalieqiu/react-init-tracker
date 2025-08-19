@@ -13,16 +13,16 @@ const PlayerDataConfig = (props) => {
     const {charData, onChange} = props;
     const defaultColumns = useMemo<MRT_ColumnDef<CharacterBase>[]>(
         () => [
-            {
+            /*{
                 accessorKey: 'id',
                 header: 'id',
-                size: 150,
+                //size: 150,
                 enableEditing: false, // Make ID non-editable
-            },
+            },*/
             {
                 accessorKey: 'initmod',
                 header: 'initmod',
-                size: 150,
+                size: 15,
 
             },
             {
@@ -59,19 +59,19 @@ const PlayerDataConfig = (props) => {
                         checked={cell.getValue() as boolean}
                     />
                 ),
-                size: 150,
+                size: 50,
             },
             {
                 accessorKey: 'team',
                 header: 'team',
-                size: 150,
+                size: 50,
                 editVariant: 'select',
                 editSelectOptions: ['red', 'blue', 'green'] as TeamColor[],
             },
             {
                 accessorKey: 'turns',
                 header: 'turns',
-                size: 150,
+                size: 20,
             },
         ],
         [],

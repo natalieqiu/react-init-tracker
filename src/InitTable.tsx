@@ -135,15 +135,29 @@ const InitTable = (props: InitTableProps) => {
         const validIds = new Set(charData.map((item: CharacterBase) => item.id));
         setData((prev: CharacterInstance[]) => prev.filter(item => validIds.has(item.id)));
     };
+    const addNewCharactersIfExist = () => {
+        // new ids = set of character ids in charData that are not already in data (local data var)
+        const existingIds = new Set(data.map((item: CharacterInstance) => item.id));
+        // Filter charData to only include characters not already in data
+        const newCharacters = charData.filter((item: CharacterBase) => !existingIds.has(item.id));
+        if (newCharacters.length > 0) {
+            // Convert new characters to instances
+            const newInstances = convertAllData(newCharacters.filter(item => item.id));
+
+            // Combine new data with preexisting data
+            setData([...data, ...newInstances]);
+        }
+
+    };
     //update data if changes:
     //compare prevCharDataRef.current (old data) with the new charData (current data)
     useEffect(() => {
         if (prevCharDataRef.current) {
             //here, its different. we just need to figre out how:
             //check for added character row
-
+            addNewCharactersIfExist();
             //check for deleted character
-            removeDeletedCharacters()
+            removeDeletedCharacters();
             //check for change in turn number
 
             //easy stuff = name, initmod, color...
