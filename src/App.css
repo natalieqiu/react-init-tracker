@@ -51,4 +51,8 @@ div {
 
 .App-body{
   background-color: #000000;
+  text-align: center;
+}
+.NEXTTURN{
+  background-color: #FF0000;
 }

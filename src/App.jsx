@@ -31,6 +31,14 @@ function App() {
     }
 
     const [openConfig, setOpenConfig] = useState(true);
+    const [turnCounter, setTurnCounter] = useState(0);
+
+
+    const handleNextTurn = () => {
+
+        // 2. Increment turn counter (triggers reroll via rerolltrigger)
+        setTurnCounter(prev => prev + 1);
+    };
 
     return (
         <>
@@ -64,13 +72,17 @@ function App() {
 
             <div className="App-body">
                 <div className="thisturn">
-                    <h2>This Turn:</h2>
-                    <InitTable charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable>
+                    <h2>Turn {turnCounter}:</h2>
+                    <InitTable className="table1" charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable>
                 </div>
-
+                <h2></h2>
+                <Button name="NEXTTURN" size={"large"} variant={"outlined"} onClick={() => {
+                    //make swap table 2 and table 1? and then reroll the new table 2.
+                    handleNextTurn()
+                }}> <h2> NEXT TURN </h2></Button>
                 <div className="nextturn">
                     <h2>Upcoming Turn:</h2>
-                    <InitTable charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable>
+                    <InitTable className = "table2" charData={gameData} numdice={numdice} numfaces={numfaces} rerolltrigger={turnCounter}></InitTable>
                 </div>
 
 

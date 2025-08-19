@@ -21,10 +21,11 @@ interface InitTableProps {
     charData: CharacterBase[],
     numdice: number,
     numfaces: number,
+    rerolltrigger?: number,
 }
 
 const InitTable = (props: InitTableProps) => {
-        const {charData, numdice, numfaces} = props;
+        const {charData, numdice, numfaces, rerolltrigger =1} = props;
         const [internalnumdice, setinternalnumdice] = useState(numdice);
         const [internalnumfaces, setinternalnumfaces] = useState(numfaces);
 
@@ -119,7 +120,7 @@ const InitTable = (props: InitTableProps) => {
                 prevData.map(char => rerollInit(char)).sort(initiativeSort) // Creates NEW array
             );
             //resortInit();
-        }, [numdice, numfaces]);
+        }, [numdice, numfaces, rerolltrigger]);
 
         const [data, setData] = useState<CharacterInstance[]>(convertAllData(charData));
         const prevCharDataRef = useRef<CharacterBase[]>();
