@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable,} from 'material-react-table';
 import {Button} from '@mui/material';
-import type {TeamColor} from './types';
+import type {CharacterBase, TeamColor} from './types';
 import {CharacterInstance} from './types';
 import {Howl} from 'howler';
 
@@ -14,8 +14,13 @@ for (let i=0; i < numDiceSfxs; i++) { //10 dice roll sounds in folder labeled 1-
     });
 }
 
+interface InitTableProps {
+    charData: CharacterBase[],
+    numdice: number,
+    numfaces: number,
+}
 
-const InitTable = (props) => {
+const InitTable = (props: InitTableProps) => {
     const {charData, numdice, numfaces} = props;
     const [internalnumdice, setinternalnumdice] = useState(numdice);
     const [internalnumfaces, setinternalnumfaces] = useState(numfaces);
@@ -63,9 +68,42 @@ const InitTable = (props) => {
     };
     const [debugroll, setdbgrResult] = useState(null);
 
-    const [data, setData] = useState<CharacterInstance[] >(charData);
+    const createOneCharInstance = (c:CharacterBase): CharacterInstance =>{
+        const roll = roll1Dice();
+        return {
+            id: c.id,  // Added unique identifier
+            name: c.name,
+            initmod: c.initmod,
+            lair: c.lair,
+            team: c.team,
+            turns: c.turns, //number or undef
+
+            instanceId: crypto.randomUUID(),
+            roll: roll,
+            init: Boolean(c.lair) ? c.initmod : roll + c.initmod
+        };
+    }
+    const updateCharData=()=>{
+        console.log('heres when we would updateCharData');
+    }
+
+    const convertAllData = ( d: CharacterBase[] ): CharacterInstance[] =>{
+        //for all unique ids in config:
+        const result = [];
+        for (let i=0; i < d.length; i++) {
+            //for number of turns listed: create 1 instance
+            for (let j=0; j< Number(d[i].turns) ; j++) {
+                result.push( createOneCharInstance(d[i]) )
+            }
+        }
+        result.sort((a:CharacterInstance, b:CharacterInstance) => b.initmod - a.initmod);
+        return result;
+    }
+
+    const [data, setData] = useState<CharacterInstance[] >(convertAllData(charData));
+
     useEffect(() => {
-        setData(charData);
+        updateCharData();
     }, [charData]);
 
     // Team color styles
@@ -90,10 +128,18 @@ const InitTable = (props) => {
         enablePagination: false,
         enableEditing: false,
         enableTableFooter: false,
+        //have it initially sorted from largest to smallest
+     /*   initialState: {
+            sorting: [{id: 'init', // This should match your accessorKey
+                    desc: true, // Sorts in descending order (highest initiative first)
+                }]},*/
         // 1. First define the drag handle configuration
         muiRowDragHandleProps: ({table}) => ({
+            onDragStart: () => {
+                table.setSorting([]); // Clear sorting when dragging starts
+            },
             onDragEnd: () => {
-                const {draggingRow, hoveredRow} = table.getState();
+                const { draggingRow, hoveredRow } = table.getState();
                 if (hoveredRow && draggingRow) {
                     const newData = [...data];
                     newData.splice(

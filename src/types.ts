@@ -10,15 +10,10 @@ export interface CharacterBase {
 }
 
 export interface CharacterInstance extends CharacterBase {
-    instanceId: number;
-    init?: number;  // Initiative can vary per instance
+    instanceId: string|number;
+    init: number;
+    roll?: number;  // Initiative can vary per instance
 }
-
-export type CharacterData = {
-    baseData: CharacterBase;  // Shared properties
-    thisTurnInstances: CharacterInstance[];  // Table-specific initiatives
-    nextTurnInstances: CharacterInstance[];
-};
 
 ////data
 
