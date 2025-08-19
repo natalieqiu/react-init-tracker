@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable,} from 'material-react-table';
 import {Button} from '@mui/material';
 import type {CharacterBase, TeamColor} from './types';
@@ -94,6 +94,10 @@ const InitTable = (props: InitTableProps) => {
         };
     }
 
+    const initiativeSort = useCallback((a: CharacterInstance, b: CharacterInstance) =>
+            b.init - a.init === 0 ? b.initmod - a.initmod : b.init - a.init
+        , []);
+
     const convertAllData = (d: CharacterBase[]): CharacterInstance[] => {
         //for all unique ids in config:
         const result = [];
@@ -103,15 +107,13 @@ const InitTable = (props: InitTableProps) => {
                 result.push(createOneCharInstance(d[i]))
             }
         }
-        result.sort((a: CharacterInstance, b: CharacterInstance) =>
-            (b.init - a.init == 0) ? b.initmod - a.initmod : b.init - a.init);
+        result.sort(initiativeSort);
         return result;
     }
     //if numdice change, reroll and resort
     useEffect(() => {
         setData(prevData =>
-            prevData.map(char => rerollInit(char)).sort((a, b) =>
-                (b.init - a.init === 0) ? b.initmod - a.initmod : b.init - a.init) // Creates NEW array
+            prevData.map(char => rerollInit(char)).sort(initiativeSort) // Creates NEW array
         );
         //resortInit();
     }, [numdice, numfaces]);
@@ -225,9 +227,8 @@ const InitTable = (props: InitTableProps) => {
                     if (!isSortedByInit) {
                         setData(prevData =>
                             //    [...prevData] creates a new array copy  and   .sort() now operates on the copy
-                            [...prevData].sort((a, b) =>
-                                b.init - a.init === 0 ? b.initmod - a.initmod : b.init - a.init
-                            )
+                            [...prevData].sort(initiativeSort)
+
                         );
                         setIsSortedByInit(true);
                     } else {
