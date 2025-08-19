@@ -52,7 +52,31 @@ div {
 .App-body{
   background-color: #000000;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 15px;
 }
-.NEXTTURN{
-  background-color: #FF0000;
+.header.this.turn{
+  order:0;
 }
+.thisturn {
+  order: 1;
+}
+.nextturn.switched {
+  order: 1;
+}
+
+.button.next{
+  order: 2;
+}
+.header.next.turn{
+  order: 3;
+}
+.thisturn.switched {
+  order: 4;
+}
+.nextturn{
+  order: 4;
+}
+

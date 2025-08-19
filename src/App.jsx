@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 import InitTable from "./InitTable.jsx";
 import Dice from './Dice.jsx'
@@ -15,7 +15,7 @@ const click = new Howl({
         ['./src/assets/mouse-click.mp3'],
     // './assets/mouse-click.mp3'], // Provide multiple formats for browser compatibility
 });
-
+const nextTurnSound= new Howl ({src:['./src/assets/swoosh-sound-effects.mp3']});
 
 function App() {
     const [count, setCount] = useState(0)
@@ -35,10 +35,18 @@ function App() {
 
 
     const handleNextTurn = () => {
-
         // 2. Increment turn counter (triggers reroll via rerolltrigger)
         setTurnCounter(prev => prev + 1);
+        nextTurnSound.play();
     };
+
+    const [turn1Trigger, setTurn1Trigger] = useState(0);
+    //make turn1 increment on odd turns, and turn 2 on even
+    useEffect(() => {
+        if (turnCounter%2) setTurn1Trigger(!turn1Trigger);
+        else setTurn2Trigger(!turn2Trigger);
+    },[turnCounter])
+    const [turn2Trigger, setTurn2Trigger] = useState(0);
 
     return (
         <>
@@ -71,18 +79,21 @@ function App() {
             </div>
 
             <div className="App-body">
-                <div className="thisturn">
-                    <h2>Turn {turnCounter}:</h2>
-                    <InitTable className="table1" charData={gameData} numdice={numdice} numfaces={numfaces}></InitTable>
+                <h2 className={'header this turn'}> Turn {turnCounter}:</h2>
+                <div className={`inittable thisturn ${turnCounter%2 ? 'switched' : ''}`}>
+
+                    <InitTable className="table1" charData={gameData} numdice={numdice} numfaces={numfaces}
+                               rerolltrigger={turn1Trigger}> </InitTable>
                 </div>
                 <h2></h2>
-                <Button name="NEXTTURN" size={"large"} variant={"outlined"} onClick={() => {
+                <Button className="button next" size={"large"} variant={"outlined"} onClick={() => {
                     //make swap table 2 and table 1? and then reroll the new table 2.
                     handleNextTurn()
                 }}> <h2> NEXT TURN </h2></Button>
-                <div className="nextturn">
-                    <h2>Upcoming Turn:</h2>
-                    <InitTable className = "table2" charData={gameData} numdice={numdice} numfaces={numfaces} rerolltrigger={turnCounter}></InitTable>
+                <h2 className={'header next turn'}>Upcoming Turn:</h2>
+                <div className={`inittable nextturn ${turnCounter%2 ? 'switched' : ''}`}>
+
+                    <InitTable className = "table2" charData={gameData} numdice={numdice} numfaces={numfaces} rerolltrigger={turn2Trigger}></InitTable>
                 </div>
 
 
