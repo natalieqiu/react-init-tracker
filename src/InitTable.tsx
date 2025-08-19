@@ -224,9 +224,11 @@ const InitTable = (props: InitTableProps) => {
                 onClick={() => {
                     if (!isSortedByInit) {
                         setData(prevData =>
-                            prevData.sort((a, b) =>
-                                (b.init - a.init === 0) ? b.initmod - a.initmod : b.init - a.init)) // this is a new array?
-
+                            //    [...prevData] creates a new array copy  and   .sort() now operates on the copy
+                            [...prevData].sort((a, b) =>
+                                b.init - a.init === 0 ? b.initmod - a.initmod : b.init - a.init
+                            )
+                        );
                         setIsSortedByInit(true);
                     } else {
                         howls[Math.floor(Math.random() * numDiceSfxs)].play();
