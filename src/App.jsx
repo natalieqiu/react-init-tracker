@@ -1,16 +1,23 @@
 import {useEffect, useState} from 'react'
 import './App.css'
 import InitTable from "./InitTable.jsx";
-import Dice from './Dice.jsx'
-//import dice from "./Dice.jsx";
 import {Howl} from 'howler';
 import {Button, Collapse} from "@mui/material";
 import RangelimitedInputter from "./RangelimitedInputter.jsx";
-import DualInitTable from "./DualInitTable.js";
 import PlayerDataConfig from "./PlayerDataConfig.js";
 import { playerConfigTestData as data} from "./types";
 
-const nextTurnSound= new Howl ({src:['./src/assets/swoosh-sound-effects.mp3']});
+const nextTurnSound= new Howl ({
+    src:['./src/assets/swoosh-sound-effects.mp3'],
+preload: true,
+    onloaderror: (id, error) => {
+        console.error('Howler load error:', error);
+    },
+    onplayerror: (id, error) => {
+        console.error('Howler play error:', error);
+    }
+
+});
 
 function App() {
 

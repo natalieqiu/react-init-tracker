@@ -1,8 +1,9 @@
 import React, {useState, useEffect } from "react";
 import {Howl} from "howler";
+import {useLazySound} from "./hooks/useLazySound.js";
 //import { useNumber } from "./NumberContext"; // Import the hook
 
-const click = new Howl({
+const click2 = new Howl({
     src://['./src/assets/deltarune-explosion.mp3']
         ['./src/assets/mouse-click.mp3'],
     // './assets/mouse-click.mp3'], // Provide multiple formats for browser compatibility
@@ -12,6 +13,7 @@ function RangelimitedInputter(props) { //default step
     const { min=1, max = 20, step = 1, value = min, onChange } = props;
     const [num, setNum] = useState(value);
     const [inputVal, setInputVal] = useState(num.toString() );
+    const {load: click} = useLazySound('./src/assets/mouse-click.mp3');
 
     // Sync internal state when external value changes
     useEffect(() => {
