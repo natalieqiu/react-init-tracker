@@ -11,10 +11,10 @@ interface PlayerDataConfigProps {
 }
 
 const deletesound = new Howl({
-    src: ['./src/assets/deltarune-explosion.mp3'],
+    src: ['./assets/deltarune-explosion.mp3'],
 });
 const createsound= new Howl({
-    src: ['./src/assets/ralsei-splat.mp3'],
+    src: ['./assets/ralsei-splat.mp3'],
 });
 
 const PlayerDataConfig = (props) => {

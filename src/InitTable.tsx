@@ -10,13 +10,13 @@ const numDiceSfxs = 10;
 const howls = {};
 for (let i = 0; i < numDiceSfxs; i++) { //10 dice roll sounds in folder labeled 1-9
     howls[i] = new Howl({
-        src: ['./src/assets/roll' + i + '.mp3', './src/assets/roll' + i + '.ogg']
+        src: ['./assets/roll' + i + '.mp3']
     });
 }
 const playRandomDice = () => {
     howls[Math.floor(Math.random() * numDiceSfxs)].play();
 };
-const resetSound = new Howl({src: ['./src/assets/klonk.mp3']});
+const resetSound = new Howl({src: ['./assets/klonk.mp3']});
 
 interface InitTableProps {
     charData: CharacterBase[],
