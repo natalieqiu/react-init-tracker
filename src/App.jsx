@@ -9,10 +9,6 @@ import { playerConfigTestData as data} from "./types";
 
 const nextTurnSound= new Howl ({
     src:['./assets/swoosh-sound-effects.mp3'],
-    //[ getSoundPath('swoosh-sound-effects.mp3')],
-    onloaderror: (id, error) => {
-        console.error('Failed to load:', getSoundPath('battle.mp3'));
-    }
 });
 
 function App() {
@@ -74,7 +70,7 @@ function App() {
             <div className={`App-body ${columnVersion ? '' : 'row'}`}>
 
                 <div className={`inittable thisturn ${turnCounter%2 ? 'switched' : ''}`}>
-                    <h2 className={'header this turn'}> {turnCounter % 2 ? 'Upcoming':'Turn ' + turnCounter }:</h2>
+                    <h2 className={'header this turn'}> {turnCounter % 2 ? 'Upcoming':'Turn ' + turnCounter }</h2>
                     <InitTable className="table1" charData={gameData} numdice={numdice} numfaces={numfaces}
                                rerolltrigger={turn1Trigger}> </InitTable>
                 </div>
