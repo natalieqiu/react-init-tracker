@@ -8,15 +8,11 @@ import PlayerDataConfig from "./PlayerDataConfig.js";
 import { playerConfigTestData as data} from "./types";
 
 const nextTurnSound= new Howl ({
-    src:['./src/assets/swoosh-sound-effects.mp3'],
-preload: true,
+    src:['./assets/swoosh-sound-effects.mp3'],
+    //[ getSoundPath('swoosh-sound-effects.mp3')],
     onloaderror: (id, error) => {
-        console.error('Howler load error:', error);
-    },
-    onplayerror: (id, error) => {
-        console.error('Howler play error:', error);
+        console.error('Failed to load:', getSoundPath('battle.mp3'));
     }
-
 });
 
 function App() {
