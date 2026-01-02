@@ -46,12 +46,12 @@ const InitTable = (props: InitTableProps) => {
                 {
                     accessorKey: 'init',
                     header: 'init',
-                    size: 150,
+                    size: 50,
                 },
                 {
                     accessorKey: 'initmod',
                     header: 'initmod',
-                    size: 150,
+                    size: 50,
                 },
                 {
                     accessorKey: 'name',

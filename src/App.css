@@ -1,8 +1,18 @@
 #root {
-  max-width: 1280px;
-  margin: 5% auto;
-  padding: 2rem;
-  text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    max-width: 1280px
+}
+
+.App-header {
+    padding: 60px;
+    top: 0;
+    background: url('Dice-PNG-Clipart.webp');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .logo {
@@ -43,11 +53,11 @@
 }
 
 .App-body{
-  background-color: #000000;
   text-align: center;
   display: flex;
   flex-direction: column;
   border-radius: 15px;
+    padding: 40px;
 }
 .App-body.row{
   flex-direction: row;
@@ -82,4 +92,36 @@
 
 footer{
   align-self: baseline;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
+    a:hover {
+        color: #747bff;
+    }
+    button {
+        background-color: #d1d1d1;
+    }
+    .App-body {
+        background-color: #afafaf;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color: #e1e1e1;
+        background-color: #3a3a3a;
+    }
+    a:hover {
+        color: #747bff;
+    }
+    button {
+        background-color: #f9f9f9;
+    }
+    .App-body {
+        background-color: #202020;
+    }
 }

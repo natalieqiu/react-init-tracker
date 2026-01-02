@@ -29,7 +29,7 @@ export const playerConfigTestData: CharacterBase[] = [
     {
         id : 2,
         initmod: 2,
-        name: 'Bvillan',
+        name: 'Bill the Villain',
         lair: false,
         team: 'red',
         turns: 2,

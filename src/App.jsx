@@ -18,10 +18,52 @@ function App() {
     const [numdice, setnumdice] = useState(2);
     const [numfaces, setnumfaces] = useState(6);
 
+    const [preset, setPreset] = useState("PbtA (2d6)" );
+    const presets = [
+        { label: "PbtA (2d6)", numdice: 2, numfaces: 6 },
+        { label: "DND (1d20)", numdice: 1, numfaces: 20 },
+        // You can add more presets here if needed
+    ];
+
+    const handlePresetChange = (e) => {
+        const selected = e.target.value;
+        setPreset(selected);
+        if (selected !== "custom") {
+            const chosenPreset = presets.find(p => p.label === selected);
+            if (chosenPreset) {
+                handleNumdiceChange(chosenPreset.numdice);
+                handleNumfacesChange(chosenPreset.numfaces);
+            }
+        }
+    };
+
+    const handleNumdiceChange = (val) => {
+        setnumdice(val);
+        updatePreset(val, numfaces);
+        setTurn1Trigger(!turn1Trigger);
+        setTurn2Trigger( !turn2Trigger);
+    };
+
+    const handleNumfacesChange = (val) => {
+        setnumfaces(val);
+        updatePreset(numdice, val);
+        //force reroll turns
+        setTurn1Trigger(!turn1Trigger);
+        setTurn2Trigger(!turn2Trigger);
+    };
+
+
+    const updatePreset = (dice, faces) => {
+        const matchedPreset = presets.find(p => p.numdice === dice && p.numfaces === faces);
+        if (matchedPreset) {
+            setPreset(matchedPreset.label);
+        } else {
+            setPreset("custom");
+        }
+    };
 
     const [openConfig, setOpenConfig] = useState(true);
     const [turnCounter, setTurnCounter] = useState(1);
-
 
     const handleNextTurn = () => {
         // 2. Increment turn counter (triggers reroll via rerolltrigger)
@@ -41,19 +83,29 @@ function App() {
     return (
         <>
             <header className="App-header">
-                <h1> Two-turn TTRPG Initiative Autoroller v.1.0</h1>
+                <h1> Two-turn TTRPG Initiative Autoroller</h1>
             </header>
+            <small>v.1.2</small>
             <nav className="App-nav">
 
             </nav>
 
             <div className="dice setter">
                 <>
-                    <RangelimitedInputter min={0} value={numdice} onChange={setnumdice}></RangelimitedInputter>
-                    <h2> {numdice} d {numfaces} </h2>
-                    <RangelimitedInputter max={1000} value={numfaces} onChange={setnumfaces}></RangelimitedInputter>
-                </>
+                    {/* Dropdown Menu */}
+                    <select value={preset} onChange={handlePresetChange}>
+                        {presets.map(p => (
+                            <option key={p.label} value={p.label}>{p.label}</option>
+                        ))}
+                        <option value="custom">Custom</option>
+                    </select>
 
+                    {/* Inputs */}
+
+                    <RangelimitedInputter min={0} value={numdice} onChange={handleNumdiceChange}></RangelimitedInputter>
+                    <h2> {numdice} d {numfaces} </h2>
+                    <RangelimitedInputter max={1000} value={numfaces} onChange={handleNumfacesChange}></RangelimitedInputter>
+                </>
             </div>
 
             <div className="config">
@@ -62,13 +114,11 @@ function App() {
                 <Collapse in={openConfig}>
                     <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
                 </Collapse>
-
-
             </div>
             <Button size={"large"} variant={'outlined'} onClick={() => setColumnVersion(!columnVersion)}>
                 switch to {columnVersion ? 'horizontal' : 'vertical' } view</Button>
-            <div className={`App-body ${columnVersion ? '' : 'row'}`}>
 
+            <div className={`App-body ${columnVersion ? '' : 'row'}`}>
                 <div className={`inittable thisturn ${turnCounter%2 ? 'switched' : ''}`}>
                     <h2 className={'header this turn'}> {turnCounter % 2 ? 'Upcoming':'Turn ' + turnCounter }</h2>
                     <InitTable className="table1" charData={gameData} numdice={numdice} numfaces={numfaces}
