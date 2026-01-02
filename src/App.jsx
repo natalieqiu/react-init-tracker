@@ -134,7 +134,9 @@ function App() {
             </div>
 
             <footer className="App-footer">
-                Copyright © 2025 Natalie Qiu. All Rights Reserved.
+                Copyright © 2026 Natalie Qiu. All Rights Reserved.
+                <br/>
+                Dice photo taken from <a href="https://www.pngall.com/dice-png/">pngall.com</a>.
             </footer>
         </>
     )

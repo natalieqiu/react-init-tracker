@@ -75,11 +75,11 @@
   order: 4;
 }
 
-.footer{
-    padding: 50px;
-    position: absolute;
+footer{
+    margin-top: 20px;;
+    position: relative;
     bottom: 0;
-  align-self: baseline;
+  align-self: center;
 }
 
 @media (prefers-color-scheme: light) {
