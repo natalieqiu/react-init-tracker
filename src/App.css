@@ -10,7 +10,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 .App-header {
-    padding: 60px;
+    padding: 40px;
     top: 0;
     font-size: calc(10px + 2vmin);
     background: url('Dice-PNG-Clipart.webp');

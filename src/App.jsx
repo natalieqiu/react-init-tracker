@@ -28,31 +28,28 @@ function App() {
     const handlePresetChange = (e) => {
         const selected = e.target.value;
         setPreset(selected);
+
         if (selected !== "custom") {
             const chosenPreset = presets.find(p => p.label === selected);
-            if (chosenPreset) {
+            if (chosenPreset !== null ) {
                 handleNumdiceChange(chosenPreset.numdice);
                 handleNumfacesChange(chosenPreset.numfaces);
             }
         }
     };
-
     const handleNumdiceChange = (val) => {
         setnumdice(val);
-        updatePreset(val, numfaces);
+        //
         setTurn1Trigger(!turn1Trigger);
-        setTurn2Trigger( !turn2Trigger);
+        setTurn2Trigger(!turn2Trigger);
     };
-
     const handleNumfacesChange = (val) => {
         setnumfaces(val);
-        updatePreset(numdice, val);
+        //updatePreset(numdice, val);
         //force reroll turns
         setTurn1Trigger(!turn1Trigger);
         setTurn2Trigger(!turn2Trigger);
     };
-
-
     const updatePreset = (dice, faces) => {
         const matchedPreset = presets.find(p => p.numdice === dice && p.numfaces === faces);
         if (matchedPreset) {
@@ -99,9 +96,7 @@ function App() {
                         ))}
                         <option value="custom">Custom</option>
                     </select>
-
                     {/* Inputs */}
-
                     <RangelimitedInputter min={0} value={numdice} onChange={handleNumdiceChange}></RangelimitedInputter>
                     <h2> {numdice} d {numfaces} </h2>
                     <RangelimitedInputter max={1000} value={numfaces} onChange={handleNumfacesChange}></RangelimitedInputter>

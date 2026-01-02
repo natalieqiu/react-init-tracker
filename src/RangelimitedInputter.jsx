@@ -26,7 +26,7 @@ function RangelimitedInputter(props) { //default step
 
     function handleInputChange(e) {
         const value = e.target.value;
-        if (value === '' || /^-?\d*$/.test(value)) {
+        if (value === '' || /^-?\d*$/.test(value)) { //clean it
             setInputVal(value);
         }
     }
@@ -48,10 +48,12 @@ function RangelimitedInputter(props) { //default step
     }
 
     function increment() {
+        setNum(num);
         updateValue( Math.min(num+step, max));
         click.play()
     }
     function decrement() {
+        setNum(num);
         updateValue( Math.max(num-step, min));
         click.play()
     }
