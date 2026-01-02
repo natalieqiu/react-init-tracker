@@ -62,7 +62,7 @@ function App() {
         }
     };
 
-    const [openConfig, setOpenConfig] = useState(true);
+    const [openConfig, setOpenConfig] = useState(false);
     const [turnCounter, setTurnCounter] = useState(1);
 
     const handleNextTurn = () => {
