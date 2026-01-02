@@ -108,8 +108,8 @@ function App() {
                 </>
             </div>
 
-            <div className="config">
-                <Button size={"large"} variant={'outlined'} onClick={() => setOpenConfig(!openConfig)}>
+            <div className={`config`}>
+                <Button className="button" size={"large"}  variant={'outlined'} onClick={() => setOpenConfig(!openConfig)}>
                     {openConfig? 'hide' : 'open'} Character Config</Button>
                 <Collapse in={openConfig}>
                     <PlayerDataConfig charData = {gameData} onChange={setGameData}></PlayerDataConfig>
